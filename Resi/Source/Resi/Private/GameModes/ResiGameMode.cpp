@@ -1,8 +1,9 @@
 // Copyright (c) 2023, Mateusz Ch³opek. All rights reserved.
 
 
-#include "ResiGameMode.h"
+#include "GameModes/ResiGameMode.h"
 #include "Characters/Player/MainPlayerController.h"
+#include "UI/HUD/MainPlayerHUD.h"
 
 void AResiGameMode::InitGameState()
 {
@@ -10,4 +11,5 @@ void AResiGameMode::InitGameState()
 
 	DefaultPawnClass = nullptr;
 	PlayerControllerClass = AMainPlayerController::StaticClass();
+	//HUDClass = AMainPlayerHUD::StaticClass();
 }

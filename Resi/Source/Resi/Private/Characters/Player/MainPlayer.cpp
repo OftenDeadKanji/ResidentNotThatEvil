@@ -2,8 +2,12 @@
 
 
 #include "Characters/Player/MainPlayer.h"
+#include "Characters/Player/MainPlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Interactable/Interactable.h"
+#include "Interactable/InteractableInfoComponent.h"
+#include "UI/HUD/MainPlayerHUD.h"
 
 AMainPlayer::AMainPlayer()
 {
@@ -61,18 +65,51 @@ void AMainPlayer::Turn(float Value)
 
 void AMainPlayer::Interact()
 {
-
+	if (InteractableInRange)
+	{
+		IInteractable::Execute_Interact(InteractableInRange, this);
+	}
 }
 
 void AMainPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	auto* World = GetWorld();
+
+	auto* PC = Cast<AMainPlayerController>(GetController());
+	check(PC);
+
+	auto* HUD = Cast<AMainPlayerHUD>(PC->GetHUD());
+	check(HUD);
+
+	FHitResult Hit;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+
+	FVector Start = MainCamera->GetComponentLocation();
+	FVector End = Start + 200.0f * MainCamera->GetForwardVector();
+
+	if (World->LineTraceSingleByChannel(Hit, Start, End, ECollisionChannel::ECC_Camera, CollisionParams))
+	{
+		GEngine->AddOnScreenDebugMessage(0, 0.1f, FColor::Yellow, TEXT("Hit"));
+		if (Hit.GetActor()->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+		{
+			GEngine->AddOnScreenDebugMessage(0, 0.1f, FColor::Yellow, TEXT("Hit with interactable"));
+			InteractableInRange = Hit.GetActor();
+			if (auto* InteractableInfoComponent = Hit.GetActor()->GetComponentByClass<UInteractableInfoComponent>())
+			{
+				HUD->ShowInteractableInfo(InteractableInfoComponent);
+			}
+			else
+			{
+				HUD->HideInteractableInfo();
+			}
+		}
+	}
+	else
+	{
+		InteractableInRange = nullptr;
+		HUD->HideInteractableInfo();
+	}
 }
-
-void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-

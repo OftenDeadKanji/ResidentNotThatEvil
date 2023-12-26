@@ -7,6 +7,8 @@
 #include "MainPlayer.generated.h"
 
 class UCameraComponent;
+class IInteractable;
+
 
 UCLASS(Blueprintable)
 class RESI_API AMainPlayer : public ACharacter
@@ -30,11 +32,12 @@ public:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* MainCamera;
 
 	UPROPERTY(EditAnywhere)
 	FVector2f CameraLookUpRange;
+
+	UPROPERTY(VisibleAnywhere)
+	AActor* InteractableInRange;
 };

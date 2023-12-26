@@ -18,8 +18,4 @@ class RESI_API AResiGameMode : public AGameModeBase
 public:
 	virtual void InitGameState() override;
 
-protected:
-	//UPROPERTY(EditAnywhere)
-	//TSubclassOf<AMainPlayer> MainPlayerClass;
-
 };
