@@ -8,7 +8,7 @@
 
 class UCameraComponent;
 class IInteractable;
-
+class UInventoryComponent;
 
 UCLASS(Blueprintable)
 class RESI_API AMainPlayer : public ACharacter
@@ -34,6 +34,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UCameraComponent* MainCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UInventoryComponent* Inventory;
 
 	UPROPERTY(EditAnywhere)
 	FVector2f CameraLookUpRange;

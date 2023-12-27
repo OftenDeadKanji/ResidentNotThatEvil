@@ -25,7 +25,7 @@ class RESI_API ADoor : public AActor, public IInteractable
 public:	
 	ADoor();
 
-	void Interact_Implementation(AActor* InteractingActor) override;
+	virtual void Interact_Implementation(AActor* InteractingActor) override;
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeState();
@@ -69,5 +69,5 @@ protected:
 	UInteractableInfoComponent* InteractableInfo;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
-	DoorState CurrentState;
+	EDoorState CurrentState;
 };

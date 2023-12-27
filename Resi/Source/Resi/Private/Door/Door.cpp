@@ -29,20 +29,20 @@ void ADoor::Interact_Implementation(AActor* InteractingActor)
 
 void ADoor::ChangeState()
 {
-	if (CurrentState == DoorState::Opening || CurrentState == DoorState::Closing)
+	if (CurrentState == EDoorState::Opening || CurrentState == EDoorState::Closing)
 	{
 		return;
 	}
 
-	if (CurrentState == DoorState::Closed)
+	if (CurrentState == EDoorState::Closed)
 	{
-		CurrentState = DoorState::Opening;
+		CurrentState = EDoorState::Opening;
 
 		OnDoorStartOpening.Broadcast();
 	}
 	else // Open
 	{
-		CurrentState = DoorState::Closing;
+		CurrentState = EDoorState::Closing;
 
 		OnDoorStartClosing.Broadcast();
 	}
@@ -50,22 +50,22 @@ void ADoor::ChangeState()
 
 bool ADoor::IsClosed() const
 {
-	return CurrentState == DoorState::Closed;
+	return CurrentState == EDoorState::Closed;
 }
 
 bool ADoor::IsClosing() const
 {
-	return CurrentState == DoorState::Closing;
+	return CurrentState == EDoorState::Closing;
 }
 
 bool ADoor::IsOpen() const
 {
-	return CurrentState == DoorState::Open;
+	return CurrentState == EDoorState::Open;
 }
 
 bool ADoor::IsOpening() const
 {
-	return CurrentState == DoorState::Opening;
+	return CurrentState == EDoorState::Opening;
 }
 
 void ADoor::BeginPlay()
@@ -76,14 +76,14 @@ void ADoor::BeginPlay()
 
 void ADoor::OnClosingAnimationFinished()
 {
-	CurrentState = DoorState::Closed;
+	CurrentState = EDoorState::Closed;
 
 	OnDoorFinishClosing.Broadcast();
 }
 
 void ADoor::OnOpeningAnimationFinished()
 {
-	CurrentState = DoorState::Open;
+	CurrentState = EDoorState::Open;
 
 	OnDoorFinishOpening.Broadcast();
 }

@@ -8,6 +8,7 @@
 #include "Interactable/Interactable.h"
 #include "Interactable/InteractableInfoComponent.h"
 #include "UI/HUD/MainPlayerHUD.h"
+#include "Inventory/InventoryComponent.h"
 
 AMainPlayer::AMainPlayer()
 {
@@ -15,6 +16,8 @@ AMainPlayer::AMainPlayer()
 
 	MainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
 	MainCamera->SetupAttachment(RootComponent);
+
+	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 }
 
 void AMainPlayer::BeginPlay()
@@ -105,6 +108,10 @@ void AMainPlayer::Tick(float DeltaTime)
 			{
 				HUD->HideInteractableInfo();
 			}
+		}
+		else
+		{
+			HUD->HideInteractableInfo();
 		}
 	}
 	else

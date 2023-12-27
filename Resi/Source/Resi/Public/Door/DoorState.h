@@ -4,7 +4,7 @@
 #include "DoorState.generated.h"
 
 UENUM(BlueprintType)
-enum class DoorState : uint8
+enum class EDoorState : uint8
 {
 	Closed,
 	Closing,
