@@ -13,11 +13,14 @@ class RESI_API AMainPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	virtual void SetupInputComponent() override;
-	
-	UFUNCTION(BlueprintCallable)
-	void SetPlayerPawnToPosses(AMainPlayer* PlayerPawn);
+
+protected:
+	virtual void OnPossess(APawn* aPawn) override;
 
 private:
 	UFUNCTION()
@@ -32,5 +35,6 @@ private:
 	UFUNCTION()
 	void CallInteract();
 
+	UPROPERTY(Replicated)
 	AMainPlayer* MainPlayer;
 };
