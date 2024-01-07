@@ -10,6 +10,6 @@ void AResiGameMode::InitGameState()
 	Super::InitGameState();
 
 	DefaultPawnClass = nullptr;
-	PlayerControllerClass = AMainPlayerController::StaticClass();
+	//PlayerControllerClass = AMainPlayerController::StaticClass();
 	//HUDClass = AMainPlayerHUD::StaticClass();
 }

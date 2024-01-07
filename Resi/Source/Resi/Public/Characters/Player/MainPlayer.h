@@ -22,14 +22,21 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	
+	UFUNCTION(BlueprintCallable)
 	void MoveRight(float Value);
+
+	UFUNCTION(BlueprintCallable)
 	void MoveForward(float Value);
+
+	UFUNCTION(BlueprintCallable)
 	void LookUp(float Value);
+
+	UFUNCTION(BlueprintCallable)
 	void Turn(float Value);
 
 	void Interact();
-
-public:	
+protected:	
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere)

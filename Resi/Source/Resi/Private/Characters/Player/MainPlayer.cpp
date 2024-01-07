@@ -81,8 +81,17 @@ void AMainPlayer::Tick(float DeltaTime)
 	auto* World = GetWorld();
 
 	auto* PC = Cast<AMainPlayerController>(GetController());
+	if (!PC)
+	{
+		return;
+	}
 	check(PC);
 
+	if(!IsLocallyControlled())
+	//if (GetNetMode() != ENetMode::NM_Client)
+	{
+		return;
+	}
 	auto* HUD = Cast<AMainPlayerHUD>(PC->GetHUD());
 	check(HUD);
 

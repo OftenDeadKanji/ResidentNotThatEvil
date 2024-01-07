@@ -59,15 +59,22 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION(Server, Reliable)
+	void SERVER_ChangeState();
+	void SERVER_ChangeState_Implementation();
+
+	UFUNCTION()
+	void OnRep_CurrentState();
+
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USkeletalMeshComponent* Mesh;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Replicated)
 	UInteractableInfoComponent* InteractableInfo;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly, ReplicatedUsing = OnRep_CurrentState)
 	EDoorState CurrentState;
 };
