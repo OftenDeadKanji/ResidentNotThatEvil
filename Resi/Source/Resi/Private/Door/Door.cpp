@@ -18,8 +18,8 @@ ADoor::ADoor()
 	Mesh->SetCollisionProfileName(TEXT("BlockAllDynamic"));
 
 	InteractableInfo = CreateDefaultSubobject<UInteractableInfoComponent>(TEXT("InteractableInfo"));
-	InteractableInfo->SetObjectName(INVTEXT("Door"));
-	InteractableInfo->SetInteractionName(INVTEXT("open"));
+	InteractableInfo->SetObjectName(NSLOCTEXT("InteractionObjectsNames", "Door", "Door"));
+	InteractableInfo->SetInteractionName(NSLOCTEXT("InteractionActionsNames", "Open", "open"));
 }
 
 void ADoor::Interact_Implementation(AActor* InteractingActor)
