@@ -4,6 +4,7 @@
 #include "Door/Door.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Interactable/InteractableInfoComponent.h"
+#include <Net/UnrealNetwork.h>
 
 ADoor::ADoor()
 {
@@ -20,6 +21,8 @@ ADoor::ADoor()
 	InteractableInfo = CreateDefaultSubobject<UInteractableInfoComponent>(TEXT("InteractableInfo"));
 	InteractableInfo->SetObjectName(NSLOCTEXT("InteractionObjectsNames", "Door", "Door"));
 	InteractableInfo->SetInteractionName(NSLOCTEXT("InteractionActionsNames", "Open", "open"));
+
+	bReplicates = true;
 }
 
 void ADoor::Interact_Implementation(AActor* InteractingActor)
@@ -34,18 +37,7 @@ void ADoor::ChangeState()
 		return;
 	}
 
-	if (CurrentState == EDoorState::Closed)
-	{
-		CurrentState = EDoorState::Opening;
-
-		OnDoorStartOpening.Broadcast();
-	}
-	else // Open
-	{
-		CurrentState = EDoorState::Closing;
-
-		OnDoorStartClosing.Broadcast();
-	}
+	SERVER_ChangeState();
 }
 
 bool ADoor::IsClosed() const
@@ -74,6 +66,34 @@ void ADoor::BeginPlay()
 	
 }
 
+void ADoor::SERVER_ChangeState_Implementation()
+{
+	if (CurrentState == EDoorState::Closed)
+	{
+		CurrentState = EDoorState::Opening;
+
+	}
+	else // Open
+	{
+		CurrentState = EDoorState::Closing;
+
+	}
+
+	OnRep_CurrentState();
+}
+
+void ADoor::OnRep_CurrentState()
+{
+	if (CurrentState == EDoorState::Opening)
+	{
+		OnDoorStartOpening.Broadcast();
+	}
+	else if (CurrentState == EDoorState::Closing)
+	{
+		OnDoorStartClosing.Broadcast();
+	}
+}
+
 void ADoor::OnClosingAnimationFinished()
 {
 	CurrentState = EDoorState::Closed;
@@ -88,3 +108,9 @@ void ADoor::OnOpeningAnimationFinished()
 	OnDoorFinishOpening.Broadcast();
 }
 
+void ADoor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ADoor, CurrentState);
+}
