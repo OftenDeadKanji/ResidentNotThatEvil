@@ -20,12 +20,6 @@ AMainPlayer::AMainPlayer()
 	Inventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
 }
 
-void AMainPlayer::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 void AMainPlayer::MoveRight(float Value)
 {
 	if (auto* MovementComp = GetMovementComponent())
@@ -70,8 +64,13 @@ void AMainPlayer::Interact()
 {
 	if (InteractableInRange)
 	{
-		IInteractable::Execute_Interact(InteractableInRange, this);
+		SERVER_Interact(InteractableInRange);
 	}
+}
+
+void AMainPlayer::SERVER_Interact_Implementation(AActor* InteractableActor)
+{
+	IInteractable::Execute_Interact(InteractableActor, this);
 }
 
 void AMainPlayer::Tick(float DeltaTime)
@@ -88,10 +87,10 @@ void AMainPlayer::Tick(float DeltaTime)
 	check(PC);
 
 	if(!IsLocallyControlled())
-	//if (GetNetMode() != ENetMode::NM_Client)
 	{
 		return;
 	}
+
 	auto* HUD = Cast<AMainPlayerHUD>(PC->GetHUD());
 	check(HUD);
 

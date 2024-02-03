@@ -18,11 +18,6 @@ class RESI_API AMainPlayer : public ACharacter
 public:
 	AMainPlayer();
 
-protected:
-	virtual void BeginPlay() override;
-
-public:
-	
 	UFUNCTION(BlueprintCallable)
 	void MoveRight(float Value);
 
@@ -37,17 +32,21 @@ public:
 
 	void Interact();
 protected:	
+	UFUNCTION(Server, Reliable)
+	void SERVER_Interact(AActor* InteractableActor);
+	void SERVER_Interact_Implementation(AActor* InteractableActor);
+
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UCameraComponent* MainCamera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UInventoryComponent* Inventory;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Camera Limits")
 	FVector2f CameraLookUpRange;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Interaction")
 	AActor* InteractableInRange;
 };

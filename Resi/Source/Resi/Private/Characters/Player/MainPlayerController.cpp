@@ -12,6 +12,8 @@
 #include "Characters/Player/MainPlayer.h"
 #include "Characters/Player/MainPlayerSpawnManager.h"
 
+#include "Inventory/ItemInspector.h"
+
 void AMainPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -34,13 +36,14 @@ void AMainPlayerController::SetupInputComponent()
 	{
 		if (auto* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
-			if (!Input.IsNull())
+			if (PlayerInputMapping && ItemInspectorInputMapping)
 			{
-				InputSystem->AddMappingContext(Input, 0);
+				InputSystem->AddMappingContext(PlayerInputMapping, 0);
+				InputSystem->AddMappingContext(ItemInspectorInputMapping, 1);
 			}
 		}
 	}
-
+	
 	auto* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
 
 	EnhancedInputComponent->BindAction(InputMoveForward, ETriggerEvent::Triggered, this, &AMainPlayerController::CallMoveForward);
@@ -48,6 +51,9 @@ void AMainPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(InputLookUp, ETriggerEvent::Triggered, this, &AMainPlayerController::CallLookUp);
 	EnhancedInputComponent->BindAction(InputTurn, ETriggerEvent::Triggered, this, &AMainPlayerController::CallTurn);
 	EnhancedInputComponent->BindAction(InputInteract, ETriggerEvent::Started, this, &AMainPlayerController::CallInteract);
+
+	EnhancedInputComponent->BindAction(InputInspectorPitch, ETriggerEvent::Triggered, this, &AMainPlayerController::CallMoveForward);
+	EnhancedInputComponent->BindAction(InputInspectorYaw, ETriggerEvent::Triggered, this, &AMainPlayerController::CallMoveRight);
 }
 
 void AMainPlayerController::OnPossess(APawn* aPawn)
@@ -102,6 +108,24 @@ void AMainPlayerController::CallInteract(const FInputActionValue& Value)
 	{
 		float TurnValue = Value.Get<float>();
 		PossessedMainPlayer->Interact();
+	}
+}
+
+void AMainPlayerController::CallInspectorPitch(const FInputActionValue& Value)
+{
+	if (PossessedItemInspector)
+	{
+		float PitchValue = Value.Get<float>();
+		PossessedItemInspector->AddPitch(PitchValue);
+	}
+}
+
+void AMainPlayerController::CallInspectorYaw(const FInputActionValue & Value)
+{
+	if (PossessedItemInspector)
+	{
+		float YawValue = Value.Get<float>();
+		PossessedItemInspector->AddYaw(YawValue);
 	}
 }
 

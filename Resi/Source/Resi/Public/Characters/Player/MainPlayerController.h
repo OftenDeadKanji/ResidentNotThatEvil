@@ -9,6 +9,7 @@
 #include "MainPlayerController.generated.h"
 
 class AMainPlayer;
+class AItemInspector;
 class UInputAction;
 
 UCLASS()
@@ -38,11 +39,21 @@ private:
 	UFUNCTION()
 	void CallInteract(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void CallInspectorPitch(const FInputActionValue& Value);
+	UFUNCTION()
+	void CallInspectorYaw(const FInputActionValue& Value);
+
 	UPROPERTY(Replicated)
-	AMainPlayer* PossessedMainPlayer;
+	AMainPlayer* PossessedMainPlayer{ nullptr };
+
+	UPROPERTY()
+	AItemInspector* PossessedItemInspector{ nullptr };
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UInputMappingContext> Input;
+	TObjectPtr<UInputMappingContext> PlayerInputMapping;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputMappingContext> ItemInspectorInputMapping;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> InputMoveForward;
@@ -56,4 +67,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> InputInteract;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> InputInspectorPitch;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> InputInspectorYaw;
 };
