@@ -27,6 +27,7 @@ protected:
 	virtual void OnPossess(APawn* aPawn) override;
 
 private:
+#pragma region Inputs
 	UFUNCTION()
 	void CallMoveRight(const FInputActionValue& Value);
 	UFUNCTION()
@@ -38,38 +39,28 @@ private:
 
 	UFUNCTION()
 	void CallInteract(const FInputActionValue& Value);
-
 	UFUNCTION()
-	void CallInspectorPitch(const FInputActionValue& Value);
-	UFUNCTION()
-	void CallInspectorYaw(const FInputActionValue& Value);
+	void CallOpenInventory(const FInputActionValue& Value);
+#pragma endregion
 
 	UPROPERTY(Replicated)
-	AMainPlayer* PossessedMainPlayer{ nullptr };
+	AMainPlayer* PossessedMainPlayer{};
 
-	UPROPERTY()
-	AItemInspector* PossessedItemInspector{ nullptr };
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UPROPERTY(EditDefaultsOnly, Category = "Input|General")
 	TObjectPtr<UInputMappingContext> PlayerInputMapping;
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UInputMappingContext> ItemInspectorInputMapping;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UPROPERTY(EditDefaultsOnly, Category = "Input|General")
 	TObjectPtr<UInputAction> InputMoveForward;
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UPROPERTY(EditDefaultsOnly, Category = "Input|General")
 	TObjectPtr<UInputAction> InputMoveRight;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UPROPERTY(EditDefaultsOnly, Category = "Input|General")
 	TObjectPtr<UInputAction> InputLookUp;
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UPROPERTY(EditDefaultsOnly, Category = "Input|General")
 	TObjectPtr<UInputAction> InputTurn;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UPROPERTY(EditDefaultsOnly, Category = "Input|General")
 	TObjectPtr<UInputAction> InputInteract;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UInputAction> InputInspectorPitch;
-	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	TObjectPtr<UInputAction> InputInspectorYaw;
+	UPROPERTY(EditDefaultsOnly, Category = "Input|General")
+	TObjectPtr<UInputAction> InputOpenInventory;
 };

@@ -9,6 +9,8 @@
 class UCameraComponent;
 class IInteractable;
 class UInventoryComponent;
+class USceneCaptureComponent2D;
+class UTextureRenderTarget2D;
 
 UCLASS(Blueprintable)
 class RESI_API AMainPlayer : public ACharacter
@@ -31,6 +33,8 @@ public:
 	void Turn(float Value);
 
 	void Interact();
+
+	UInventoryComponent* GetInventory();
 protected:	
 	UFUNCTION(Server, Reliable)
 	void SERVER_Interact(AActor* InteractableActor);
@@ -48,5 +52,5 @@ protected:
 	FVector2f CameraLookUpRange;
 
 	UPROPERTY(VisibleAnywhere, Category = "Interaction")
-	AActor* InteractableInRange;
+	AActor* InteractableInRange{};
 };

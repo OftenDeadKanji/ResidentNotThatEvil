@@ -13,6 +13,7 @@
 #include "Characters/Player/MainPlayerSpawnManager.h"
 
 #include "Inventory/ItemInspector.h"
+#include "UI/HUD/MainPlayerHUD.h"
 
 void AMainPlayerController::BeginPlay()
 {
@@ -36,10 +37,9 @@ void AMainPlayerController::SetupInputComponent()
 	{
 		if (auto* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
-			if (PlayerInputMapping && ItemInspectorInputMapping)
+			if (PlayerInputMapping)
 			{
 				InputSystem->AddMappingContext(PlayerInputMapping, 0);
-				InputSystem->AddMappingContext(ItemInspectorInputMapping, 1);
 			}
 		}
 	}
@@ -51,9 +51,7 @@ void AMainPlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(InputLookUp, ETriggerEvent::Triggered, this, &AMainPlayerController::CallLookUp);
 	EnhancedInputComponent->BindAction(InputTurn, ETriggerEvent::Triggered, this, &AMainPlayerController::CallTurn);
 	EnhancedInputComponent->BindAction(InputInteract, ETriggerEvent::Started, this, &AMainPlayerController::CallInteract);
-
-	EnhancedInputComponent->BindAction(InputInspectorPitch, ETriggerEvent::Triggered, this, &AMainPlayerController::CallMoveForward);
-	EnhancedInputComponent->BindAction(InputInspectorYaw, ETriggerEvent::Triggered, this, &AMainPlayerController::CallMoveRight);
+	EnhancedInputComponent->BindAction(InputOpenInventory, ETriggerEvent::Started, this, &AMainPlayerController::CallOpenInventory);
 }
 
 void AMainPlayerController::OnPossess(APawn* aPawn)
@@ -106,26 +104,25 @@ void AMainPlayerController::CallInteract(const FInputActionValue& Value)
 {
 	if (PossessedMainPlayer)
 	{
-		float TurnValue = Value.Get<float>();
 		PossessedMainPlayer->Interact();
 	}
 }
 
-void AMainPlayerController::CallInspectorPitch(const FInputActionValue& Value)
+void AMainPlayerController::CallOpenInventory(const FInputActionValue& Value)
 {
-	if (PossessedItemInspector)
+	if (PossessedMainPlayer)
 	{
-		float PitchValue = Value.Get<float>();
-		PossessedItemInspector->AddPitch(PitchValue);
-	}
-}
+		auto* HUD = GetHUD<AMainPlayerHUD>();
+		check(HUD);
 
-void AMainPlayerController::CallInspectorYaw(const FInputActionValue & Value)
-{
-	if (PossessedItemInspector)
-	{
-		float YawValue = Value.Get<float>();
-		PossessedItemInspector->AddYaw(YawValue);
+		if (HUD->IsInventoryOpen())
+		{
+			HUD->CloseInventory();
+		}
+		else
+		{
+			HUD->OpenInventory();
+		}
 	}
 }
 

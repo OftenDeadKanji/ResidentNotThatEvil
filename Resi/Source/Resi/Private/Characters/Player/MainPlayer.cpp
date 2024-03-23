@@ -9,6 +9,8 @@
 #include "Interactable/InteractableInfoComponent.h"
 #include "UI/HUD/MainPlayerHUD.h"
 #include "Inventory/InventoryComponent.h"
+#include "Components/SceneCaptureComponent2D.h"
+#include "Engine/TextureRenderTarget2D.h"
 
 AMainPlayer::AMainPlayer()
 {
@@ -66,6 +68,11 @@ void AMainPlayer::Interact()
 	{
 		SERVER_Interact(InteractableInRange);
 	}
+}
+
+UInventoryComponent* AMainPlayer::GetInventory()
+{
+	return Inventory;
 }
 
 void AMainPlayer::SERVER_Interact_Implementation(AActor* InteractableActor)
